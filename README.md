@@ -1,4 +1,4 @@
-以下の手順は、**「Microsoft Teams の Incoming Webhook」×「GitHub Actions」** を使って定期的にPythonスクリプトを実行し、Teamsへ通知するまでの一連の流れを、**非エンジニアでも再現できるように**ステップバイステップで解説したものです。  
+以下の手順は、**「Microsoft Teams の Incoming Webhook」×「GitHub Actions」** を使って定期的にPythonスクリプトを実行し、Teamsへ通知するまでの一連の流れを解説したものです。  
 
 ---
 ## 全体の流れ
@@ -48,7 +48,8 @@ GitHub にソースコードとして直接書くのは危険なので、**シ�
    - 入力後、「Add secret」ボタンをクリックすれば登録完了です。  
 
 :::tip
-今後、**Pythonコード側では `os.environ["TEAMS_WEBHOOK_URL"]` で呼び出して** 使う流れになります。  
+今後、**Pythonコード側では `os.environ["TEAMS_WEBHOOK_URL"]` で呼び出して** 使う流れになります。
+また、Webhook URLについて分からない点があれば担当リーダーか仁紀までお尋ねください。
 :::
 
 ---
@@ -60,6 +61,7 @@ GitHub にソースコードとして直接書くのは危険なので、**シ�
 3. **サンプルコード（Teams用のIncoming Webhook投稿）**  
 
 以下のサンプルは「Google検索のステータスサイトをスクレイピングして取得し、Teamsに通知する」イメージです。
+コーディングスキルのある方は、必要に応じてカスタマイズを行ってください。
 
 ```python
 import os
@@ -223,7 +225,7 @@ jobs:
 3. **Python スクリプト** で `requests.post` を使い、Teams に投稿するコードを書いてリポジトリへ。  
 4. **GitHub Actions** で `cron` スケジュールや手動トリガーを設定し、Python を定期実行 → Teams に通知。  
 
-これらのステップで、**非エンジニアでも簡単に「Teams への定期通知ボット」を GitHub Actions 上で運用**することが可能になります。  
+これらのステップで、**「Teams への定期通知ボット」を GitHub Actions 上で運用**することが可能になります。  
   
 - 特にポイントとなるのは「Secrets」によるWebhook URLの安全な保管と、「ActionsのYAMLファイル」による定期実行の設定です。  
 - 一度セットアップしてしまえば、あとはGitHubが自動的に実行してくれるので便利です。  
