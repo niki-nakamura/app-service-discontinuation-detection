@@ -3,7 +3,7 @@ name: Scheduled Teams Post
 on:
   schedule:
     - cron: '0 9 * * *'  # 毎日 09:00 (UTC)に実行
-  workflow_dispatch:     # 手動実行もできるようにするオプション
+  workflow_dispatch     # 「:」を削除！！発火を停止のために／手動実行もできるようにするオプション
 
 jobs:
   post-to-teams:
