@@ -1,0 +1,20 @@
+name: Service End Checker
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 毎日午前9時(UTC)に実行
+  workflow_dispatch:  # 手動での実行も可
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        run: python main.py
