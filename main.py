@@ -1,41 +1,36 @@
-# google_play_scraper.py
-from google_play_scraper import app, search
-from requests import get
-from bs4 import BeautifulSoup
+# main.py
+from google_play_scraper import get_google_play_app_info
+from app_store_scraper import get_app_store_info
+import re
 
-def get_google_play_app_info(package_name):
-    """
-    指定したパッケージ名のアプリ情報をgoogle-play-scraperで取得
-    もし取得に失敗したら配信停止の可能性
-    """
-    try:
-        result = app(package_name, lang='ja', country='jp')
-        # 取得成功時のデータ
-        return {
-            'name': result.get('title'),
-            'description': result.get('description'),
-            'url': f"https://play.google.com/store/apps/details?id={package_name}",
-            'status': 'available'  # 仮に
-        }
-    except Exception:
-        # 取得失敗 → ストアから削除されている可能性が高い
-        return {
-            'name': None,
-            'description': None,
-            'url': f"https://play.google.com/store/apps/details?id={package_name}",
-            'status': 'not_found'  # 配信停止と推定
-        }
+# サービス終了のキーワード例を列挙
+END_KEYWORDS = [
+    "サービス終了",
+    "配信終了",
+    "提供終了",
+    "サービス終了のお知らせ",
+    "終了のお知らせ",
+    "〇月〇日をもってサービス終了"  # 正規表現で日付パターンを拾ってもよい
+]
 
-def check_app_availability_by_html(package_name):
+def detect_service_end_status(app_info):
     """
-    HTMLを直接スクレイピングして利用不可メッセージを探す(オプション)
+    app_info: { name, description, url, status } の辞書
+    からサービス終了を推定し、結果を返す
     """
-    url = f"https://play.google.com/store/apps/details?id={package_name}"
-    response = get(url)
-    if response.status_code == 404:
-        return 'not_found'
-    soup = BeautifulSoup(response.text, 'html.parser')
-    # 例: 「このアプリはご利用いただけません」を含むかチェック
-    if 'このアプリはご利用いただけません' in soup.text:
-        return 'unavailable'
-    return 'available'
+    # 1) ステータスが not_found の場合: 配信停止とみなす
+    if app_info['status'] == 'not_found':
+        return "配信停止"
+
+    # 2) 説明文・タイトルにキーワードが含まれるかチェック
+    desc = app_info['description'] or ""
+    name = app_info['name'] or ""
+    combined_text = f"{name}\n{desc}"
+    
+    # キーワード検知
+    for kw in END_KEYWORDS:
+        if kw in combined_text:
+            return "サービス終了告知あり"
+    
+    # 特別な記載が無ければ「提供中」
+    return "提供中"
