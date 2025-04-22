@@ -1,0 +1,6 @@
+# 共通
+.DS_Store
+.env
+node_modules/
+__pycache__/
+*.pyc
