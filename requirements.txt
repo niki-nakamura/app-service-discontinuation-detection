@@ -1,7 +1,2 @@
-requests
-beautifulsoup4
-google-play-scraper
-gspread
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
+PyYAML>=5.4
+requests>=2.25.1
