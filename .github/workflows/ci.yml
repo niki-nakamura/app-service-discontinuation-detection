@@ -1,20 +1,29 @@
-name: Service End Checker
+name: CI
 
 on:
-  schedule:
-    - cron: '0 9 * * *'  # 毎日午前9時(UTC)に実行
-  workflow_dispatch:  # 手動での実行も可
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run script
-        run: python main.py
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # ※言語を決めたら以下をコメントアウト解除して利用
+      #- name: Setup Python
+      #  uses: actions/setup-python@v4
+      #  with:
+      #    python-version: '3.x'
+
+      #- name: Install dependencies
+      #  run: pip install -r requirements.txt
+
+      #- name: Run tests
+      #  run: pytest --maxfail=1 --disable-warnings -q
+
+      - name: Placeholder step
+        run: echo "後ほど言語を決めて install や test をここに追加します"
