@@ -1,0 +1,2 @@
+update_threshold_days: 180  # 180日（約6ヶ月）以上更新が無い場合に「更新停止」と判定
+country_code: "JP"         # ストア情報取得に使う国コード
