@@ -1,0 +1,21 @@
+name: Daily App Monitoring
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 毎日0:00 UTC
+
+jobs:
+  check_apps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3  # リポジトリをチェックアウト（コード取得）
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run app status checker
+        env: 
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDS_JSON }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python src/main.py
