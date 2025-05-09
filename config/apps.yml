@@ -1,9 +1,0 @@
-# 監視対象アプリ一覧
-android:
-  - com.example.app1
-  - com.example.app2
-ios:
-  - 1234567890
-  - 0987654321
-endpoints:
-  - https://api.example.com/v1/health
